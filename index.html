@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<script>
+(function () {
+  // 🔧 SET YOUR TARGET — replace with a specific video/channel if needed
+  var WEB_URL     = "https://youtu.be/mlOiXMvMaZo";
+  var IOS_SCHEME  = "youtube://";                    // opens YouTube app on iOS
+  var AND_INTENT  = "intent://www.youtube.com"       // Android intent URL
+    + "#Intent;scheme=https;"
+    + "package=com.google.android.youtube;"
+    + "S.browser_fallback_url=" + encodeURIComponent(WEB_URL) + ";end";
+
+  var ua = navigator.userAgent;
+
+  if (/Android/i.test(ua)) {
+    // Android: intent:// handles app + fallback natively — zero JS timeout needed
+    location.href = AND_INTENT;
+
+  } else if (/iPad|iPhone|iPod/i.test(ua)) {
+    // iOS: try custom scheme, fall back if app not installed
+    var t = setTimeout(function () { location.href = WEB_URL; }, 0);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) clearTimeout(t); // app opened — cancel redirect
+    });
+    location.href = IOS_SCHEME;
+
+  } else {
+    // Desktop / everything else → straight to web
+    location.href = WEB_URL;
+  }
+}());
+</script>
+</body>
+</html>
