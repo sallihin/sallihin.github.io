@@ -9,32 +9,15 @@
 <script>
 (function () {
   var WEB_URL    = "https://youtu.be/mlOiXMvMaZo";
-  var IOS_SCHEME = "youtube://youtu.be/mlOiXMvMaZo";
-  var AND_INTENT = "intent://youtu.be/mlOiXMvMaZo"
+  var IOS_SCHEME = "youtube://www.youtube.com/watch?v=mlOiXMvMaZo";
+  var AND_INTENT = "intent://www.youtube.com/watch?v=mlOiXMvMaZo"
     + "#Intent;scheme=https;"
     + "package=com.google.android.youtube;"
     + "S.browser_fallback_url=" + encodeURIComponent(WEB_URL) + ";end";
-  function silentOpen(url) {
-    var a = document.createElement("a");
-    a.href = url;
-    a.style.display = "none";
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
   var ua = navigator.userAgent;
   if (/Android/i.test(ua)) {
     silentOpen(AND_INTENT);
   } else if (/iPad|iPhone|iPod/i.test(ua)) {
-    var t = setTimeout(function () {
-      location.href = WEB_URL;
-    }, 1200);
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) clearTimeout(t); // app opened — kill fallback timer
-    });
-    silentOpen(IOS_SCHEME);
-  } else {
     location.href = WEB_URL;
   }
 }());
