@@ -19,7 +19,7 @@
     location.href = AND_INTENT;
 
   } else if (/iPad|iPhone|iPod/i.test(ua)) {
-    var t = setTimeout(function () { location.href = WEB_URL; }, 100);
+    var t = setTimeout(function () { location.href = IOS_SCHEME; }, 100);
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) clearTimeout(t); // app opened — cancel redirect
     });
