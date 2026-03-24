@@ -3,28 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Opening YouTube...</title>
 </head>
 <body>
 <script>
 (function () {
-  var WEB_URL     = "https://youtu.be/mlOiXMvMaZo";
-  var IOS_SCHEME  = "youtube://youtu.be/mlOiXMvMaZo";                   
-  var AND_INTENT  = "intent://youtu.be/mlOiXMvMaZo"       
+  var WEB_URL    = "https://youtu.be/mlOiXMvMaZo";
+  var IOS_SCHEME = "youtube://youtu.be/mlOiXMvMaZo";
+  var AND_INTENT = "intent://youtu.be/mlOiXMvMaZo"
     + "#Intent;scheme=https;"
     + "package=com.google.android.youtube;"
     + "S.browser_fallback_url=" + encodeURIComponent(WEB_URL) + ";end";
+  function silentOpen(url) {
+    var a = document.createElement("a");
+    a.href = url;
+    a.style.display = "none";
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
   var ua = navigator.userAgent;
-
   if (/Android/i.test(ua)) {
-    location.href = AND_INTENT;
-
+    silentOpen(AND_INTENT);
   } else if (/iPad|iPhone|iPod/i.test(ua)) {
-    var t = setTimeout(function () { location.href = IOS_SCHEME; }, 100);
+    var t = setTimeout(function () {
+      location.href = WEB_URL;
+    }, 1200);
     document.addEventListener("visibilitychange", function () {
-      if (document.hidden) clearTimeout(t); // app opened — cancel redirect
+      if (document.hidden) clearTimeout(t); // app opened — kill fallback timer
     });
-    location.href = IOS_SCHEME;
-
+    silentOpen(IOS_SCHEME);
   } else {
     location.href = WEB_URL;
   }
